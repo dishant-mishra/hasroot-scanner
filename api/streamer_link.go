@@ -31,7 +31,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	result := search(records, r.URL.Query().Get("character"))
 
-	fmt.Fprintf(w, "%s is played by twitch.tv/%s", result.Character, result.Streamer)
+	if result.Streamer == "" {
+		fmt.Fprintf(w, "%s does not match any entry in the database", r.URL.Query().Get("character"))
+	} else {
+		fmt.Fprintf(w, "%s is played by twitch.tv/%s", result.Character, result.Streamer)
+	}
 }
 
 type Record struct {
